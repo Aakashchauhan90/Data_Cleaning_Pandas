@@ -1,0 +1,125 @@
+Data Cleaning In Python Basics Using Pandas
+Published Sep 28, 2019Last updated Oct 23, 2019
+Data Cleaning In Python Basics Using Pandas
+When working with data, there's one skill you have to master, and that is cleaning data. It's very rare that you'll have clean data to work with. So, you'll have to learn how to clean data.
+
+In this post, I’ll walk you through how to deal with cleaning data in Python using the Pandas library. After reading this post, you’ll be equipped with the tools necessary to do this.
+
+To help with the explanations, I will create an example dataframe to help us understand.
+
+# import libraries
+import pandas as pd 
+import numpy as np 
+  
+# Create dictionary 
+dictionary = {'Name’:[‘Alex’, ‘Mike’, ‘John’, ‘Dave’, ’Joey’], 
+        	  ‘Height(m)’: [1.75, 1.65, 1.73, np.nan, 1.82], 
+     	        'Test Score':[70, np.nan, 84, 62, 73]} 
+  
+# Convert dictionary to dataframe 
+df = pd.DataFrame(dictionary) 
+output:
+
+Screenshot 2019-09-27 at 15.46.34.png
+
+Checking for missing values
+The first thing you need when cleaning your data is to check for any missing values. This can easily be done by using the isnull function paired with the ' sum ' function.
+
+df.isnull().sum()
+output:
+
+Screenshot 2019-09-27 at 15.48.50.png
+
+We can see from the output that we have 2 null values. One in the 'Height(m)' column, and one in the 'Test Score' column.
+
+Dealing with missing values
+Now that we've found out where the missing values are, we can now deal with them. There are a number of ways to deal with missing values. Of course, you can just leave the missing values alone, but this is not the best option, so let’s see how we can deal with them.
+
+The first thing you can do, is fill in the missing values with a word or symbol. An example of this would be replacing the missing data with ‘ * ‘.
+
+If you want to fill in all the values in the dataframe then we use the ‘fillna’ function
+
+df = df.fillna('*') 
+output:
+
+Screenshot 2019-09-27 at 15.53.24.png
+
+If you want to fill in the values for a certain column, for example the 'Test Score' column, we add the column name in our code as shown below:
+
+df[‘Test Score’] = df[‘Test Score’].fillna('*') 
+output:
+
+Screenshot 2019-09-27 at 15.58.44.png
+
+The second thing you do is replace it with the average. This can include mean if it’s a number or mode if it’s a word.
+df[‘Test Score’] = df[‘Test Score'].fillna(df['Test Score'].mean())
+output:
+Screenshot 2019-09-27 at 16.01.41.png
+
+We can also use the interpolate function to fill in missing values for a number. This will take the average of the number above and below the missing value in the dataframe.
+
+df['Test Score'] = df['Test Score'].fillna(df['Test Score'].interpolate())
+output:
+
+Screenshot 2019-09-27 at 16.03.24.png
+
+This is a very powerful function as it has many methods to fill in the data and many other features, which we're not going to go over in this post.
+
+The final thing you can do, is to delete the missing rows of data. We can delete all rows with any missing data as shown below
+df= df.dropna() 
+output:
+
+Screenshot 2019-09-27 at 16.04.58.png
+
+Or we can delete rows with missing data in a certain column, for example the height column.
+
+df[‘Height(m)']= df[‘Height(m)’].dropna() 
+output:
+
+Screenshot 2019-09-27 at 16.06.42.png
+
+Dealing with Non-standard missing values
+Sometimes the missing values in our data may not come up when we do our check for missing values. When checking for missing values, the isnull() function only picks up ‘Nan’ and not other types of missing values such as a dash(‘-‘) or even ‘na’. I'll create a new dataframe to show this.
+
+# dictionary of lists 
+dictionary = {'Name’:[‘Alex’, ‘Mike’, ‘John’, ‘Dave’, ’Joey’], 
+        ‘Height(m)’: [1.75, 1.65, ‘-‘, ‘na’, 1.82], 
+        'Test Score':[70, np.nan, 8, 62, 73]} 
+  
+# creating a dataframe from list 
+df = pd.DataFrame(dictionary) 
+output:
+
+Screenshot 2019-09-27 at 16.10.25.png
+
+As we can see, we have 3 missing values. Two in the 'Height(m)' column, and one in the 'Test Score' column. But when we run the df.isnull() function, we can see that only one of the null values is picked up.
+
+df.isnull() 
+output:
+
+Screenshot 2019-09-27 at 16.11.55.png
+
+We can deal with this by first converting it into ‘NaN’ by using the replace function, and then deal with the missing values however we want.
+
+df = df.replace(['-','na'], np.nan)
+output:
+
+Screenshot 2019-09-27 at 16.15.20.png
+
+Data in the wrong format
+Sometimes we might have to deal with data in the wrong format. For example, in the ‘Test Score’ column we might have a word instead of a number.
+
+# dictionary of lists 
+dictionary = {'Name’:[‘Alex’, ‘Mike’, ‘John’, ‘Dave’, ’Joey’], 
+        ‘Height(m)’: [1.75, 1.65, 1.54, 1.87, 1.82], 
+        'Test Score':[70, ‘yes’, 8, 62, 73]} 
+  
+# creating a dataframe from list 
+df = pd.DataFrame(dictionary) 
+output:
+
+Screenshot 2019-09-27 at 17.52.35.png
+
+As you can see, in the test score column, there is a non number entry. This can be dealt with in the same way as we did with non standard missing values. We use the replace function to change it to missing value or ‘ NaN ’. Then we can deal with the missing values however we want.
+
+You could also create a loop to run through all the entries of the 'Test Score' column to turn every non-number into a null value. But for simplicity reasons, I've decided to not include this.
