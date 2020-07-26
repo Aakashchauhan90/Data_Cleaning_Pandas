@@ -1,6 +1,4 @@
 Data Cleaning In Python Basics Using Pandas
-Published Sep 28, 2019Last updated Oct 23, 2019
-Data Cleaning In Python Basics Using Pandas
 When working with data, there's one skill you have to master, and that is cleaning data. It's very rare that you'll have clean data to work with. So, you'll have to learn how to clean data.
 
 In this post, I’ll walk you through how to deal with cleaning data in Python using the Pandas library. After reading this post, you’ll be equipped with the tools necessary to do this.
